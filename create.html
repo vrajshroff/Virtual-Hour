@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-firestore.js"></script>
   <script>
+
     var firebaseConfig = {
       apiKey: "AIzaSyCwnSJODwjoQxsueGtoiIwAcNxo9Y6Zt78",
       authDomain: "virtual-hour.firebaseapp.com",
@@ -21,57 +23,102 @@
     };
     firebase.initializeApp(firebaseConfig);
   </script>
-
-  <script type="text/javascript">
-    initApp = function() {
-      firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          // User is signed in.
-          var providerData = user.providerData;
-          user.getIdToken().then(function(accessToken) {
-            //server stuff
-          });
-        } else {
-          // User is signed out.
-        }
-      }, function(error) {
-        console.log(error);
-      });
-    };
-
-    window.addEventListener('load', function() {
-      initApp();
-    });
-  </script>
 </head>
 
 <style>
-  body,
-  html {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+  .buttonload {
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
   }
 
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
+  .fa {
+    margin-left: -12px;
+    margin-right: 8px;
   }
 </style>
 
+
 <body style="background-color:AliceBlue;">
-  <div class="row" style="background-color:Navy;">
-    <div class="col">
-      <h1 align="center" style="color:white;">Virtual Hour</h1>
-      <p align="center" style="color:white;"> <i>An Online Platform for Office Hours </i></p>
+  <div class="container-fluid">
+    <div class="row" style="background-color:Navy;">
+      <div class="col">
+        <h1 align="center" style="color:white;">Virtual Hour</h1>
+        <p align="center" style="color:white;"> <i>An Online Platform for Office Hours </i></p>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col">
+        <br>
+        <h3>Create Virtual Hour for your Class</h3>
+        <br>
+        <p>Class ID: <input type="text" id="classID" placeholder="CIS-350-Spring-2020"></p>
+        <p>Maximum number of TAs per office hour: <input type="number" value="1" id="adminNum" min=1 max=10></p>
+        <p>Password for the Class: <input type="password" id="newPassword"></p>
+        <label for="emails">Emails of all TAs who will have access to this class<i> (seperate emails by comma):</i></label><br>
+        <textarea id="emails" rows="4" cols="50" style="max-width:90%;"></textarea><br><br>
+        <button id="createButton" class="btn btn-primary" onclick="create()">Create Event</button><br>
+        <div id="errorDiv" class="buttonload">
+          <p style="color:red;" id="error"></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function create() {
+        document.getElementById("error").innerHTML = '<i class="fa fa-refresh fa-spin"></i>Creating Virtual Rooms';
+        document.getElementById("createButton").disabled = true;
+
+        var classID = document.getElementById("classID").value;
+        var adminNum = document.getElementById("adminNum").value;
+        var newPassword = document.getElementById("newPassword").value;
+        var emailsRaw = document.getElementById("emails").values
+        var emails = [];
+
+        if (!classID || !adminNum || !newPassword || !emails) {
+          document.getElementById("error").innerHTML = 'Fill out all the fields above.';
+          return;
+        }
+
+        if (!/^\d+$/.test(adminNum) || adminNum < 1 || adminNum > 10) {
+          document.getElementById("error").innerHTML = 'Enter a valid number of TAs, > 0 and < 11.';
+          return;
+        }
+
+        emailsRaw = emailsRaw.split(",");
+        for (var i = 0; i < emailsRaw.length; i++) {
+          emailsRaw[i] = emailsRaw[i].trim();
+          if (emailsRaw[i]) {
+            emails.push({
+              email: emailsRaw[i]
+            });
+          }
+        }
+
+        var db = firebase.firestore();
+        db.collection("classes").doc(classID).set({
+            password: password,
+            adminNum: adminNum,
+            tas: emails,
+            creator: firebase.auth().currentUser.displayName,
+            email: firebase.auth().currentUser.email,
+            links: []
+          })
+          .then(function() {
+            console.log("Document successfully written!");
+            document.getElementById("error").innerHTML = 'Virtual Hour created successfully for the class.';
+            document.getElementById("createButton").disabled = false;
+          })
+          .catch(function(error) {
+            console.error("Error writing document: ", error);
+            document.getElementById("error").innerHTML = 'Error Occured. Please try again.';
+            document.getElementById("createButton").disabled = false;
+          });
+      }
+    </script>
+
   </div>
-  <br>
-  <iframe id="iframe" src="https://script.google.com/macros/s/AKfycbytheILvHSlL8jsLSLprnvvIOXDyOcws81782lrTjvbp9sUZ6jb/exec" height="100%"></iframe>
-  <script>
-    //document.getElementById('myFrame').contentWindow.abc()
-  </script>
 </body>
 
 
