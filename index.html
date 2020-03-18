@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Virtual Hour</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/a0c4b2a8d6.js" crossorigin="anonymous"></script>
+</head>
+
+<style>
+  .row {
+    display: flex;
+    align-items: center;
+  }
+
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+</style>
+
+<body style="background-color:AliceBlue;">
+
+  <div class="container-fluid">
+    <div class="row" style="background-color:Navy;">
+      <div class="col">
+        <h1 align="center" style="color:white;">Virtual Hour</h1>
+        <p align="center" style="color:white;"> <i>An Online Platform for Office Hours </i></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <br><br>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h3>Everything from in-person office hours, but virtually</h3>
+        <br>
+        <h5><i class="fas fa-globe-americas" style="font-size:5vp;"></i>&nbsp;Talk to students around the world through video conferencing</h5><br>
+        <h5><i class="fas fa-chalkboard-teacher" style="font-size:5vp;"></i>&nbsp;Students can share their screen and pipoint problems privately</h5><br>
+        <h5><i class="fas fa-users" style="font-size:5vp;"></i>&nbsp;Students can form a queue and multiple teaching assistants can help</h5><br>
+        <h5><i class="fas fa-user-tie" style="font-size:5vp;"></i>&nbsp;Professor and teaching assistants can help students collectively or one-on-one</h5><br>
+      </div>
+
+      <div class="col" style="border-left: 2px ridge;">
+        <h3> Students, log in here </h3>
+        <input type="text" id="studentClassroomID" name="studentClassroomID" placeholder="Classroom ID">&nbsp;&nbsp;<br><br>
+        <button id="studentLogIn" onclick="studentLogIn()">Log In</button><br>
+        <hr>
+
+        <h3> Faculty, log in here </h3>
+        <input type="text" id="facultyClassroomID" name="facultyClassroomID" placeholder="Classroom ID">&nbsp;&nbsp;<br><br>
+        <input type="password" id="facultyPassword" name="facultyPassword" placeholder="Password">&nbsp;&nbsp;<br><br>
+        <button id="facultyLogIn" onclick="facultyLogIn()">Log In</button><br>
+        <hr>
+
+        <h3> New Here? </h3>
+        <h6>Faculty can create Virtual Hour for their class here.&nbsp;&nbsp;<br><br>
+          <button onclick="location.href='create.html';"">Create Virtual Hour</button></h6>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="row">
+        <div class="col">
+          <hr>
+          <p><i>This platform is created by <a href="https://www.linkedin.com/in/vrajshroff"> Vraj Shroff</a>. If you have any questions, please email <a href="mailto:vshroff@sas.upenn.edu">vshroff@sas.upenn.edu</a>.</i></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>
