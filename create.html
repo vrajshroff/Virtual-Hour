@@ -1,72 +1,92 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Create Virtual Hour</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
-    <script>
-      var firebaseConfig = {
-        apiKey: "AIzaSyCwnSJODwjoQxsueGtoiIwAcNxo9Y6Zt78",
-        authDomain: "virtual-hour.firebaseapp.com",
-        databaseURL: "https://virtual-hour.firebaseio.com",
-        projectId: "virtual-hour",
-        storageBucket: "virtual-hour.appspot.com",
-        messagingSenderId: "721474763020",
-        appId: "1:721474763020:web:ea4e55f0bc329695d53129",
-        measurementId: "G-TNVC2J28C0"
-      };
-      firebase.initializeApp(firebaseConfig);
-    </script>
 
-    <script type="text/javascript">
-      initApp = function() {
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            // User is signed in.
-            var displayName = user.displayName;
-            var email = user.email;
-            var emailVerified = user.emailVerified;
-            var photoURL = user.photoURL;
-            var uid = user.uid;
-            var phoneNumber = user.phoneNumber;
-            var providerData = user.providerData;
-            user.getIdToken().then(function(accessToken) {
-              document.getElementById('sign-in-status').textContent = 'Signed in';
-              document.getElementById('sign-in').textContent = 'Sign out';
-              document.getElementById('account-details').textContent = JSON.stringify({
-                displayName: displayName,
-                email: email,
-                emailVerified: emailVerified,
-                phoneNumber: phoneNumber,
-                photoURL: photoURL,
-                uid: uid,
-                accessToken: accessToken,
-                providerData: providerData
-              }, null, '  ');
-            });
-          } else {
-            // User is signed out.
-            document.getElementById('sign-in-status').textContent = 'Signed out';
-            document.getElementById('sign-in').textContent = 'Sign in';
-            document.getElementById('account-details').textContent = 'null';
-          }
-        }, function(error) {
-          console.log(error);
-        });
-      };
+<head>
+  <title>Create Virtual Hour</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyCwnSJODwjoQxsueGtoiIwAcNxo9Y6Zt78",
+      authDomain: "virtual-hour.firebaseapp.com",
+      databaseURL: "https://virtual-hour.firebaseio.com",
+      projectId: "virtual-hour",
+      storageBucket: "virtual-hour.appspot.com",
+      messagingSenderId: "721474763020",
+      appId: "1:721474763020:web:ea4e55f0bc329695d53129",
+      measurementId: "G-TNVC2J28C0"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 
-      window.addEventListener('load', function() {
-        initApp();
+  <script type="text/javascript">
+    initApp = function() {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // User is signed in.
+          var providerData = user.providerData;
+          user.getIdToken().then(function(accessToken) {
+            //server stuff
+          });
+        } else {
+          // User is signed out.
+        }
+      }, function(error) {
+        console.log(error);
       });
-    </script>
-  </head>
-  <body>
-    <h1>Welcome to My Awesome App</h1>
-    <div id="sign-in-status"></div>
-    <div id="sign-in"></div>
-    <pre id="account-details"></pre>
-  </body>
+    };
+
+    window.addEventListener('load', function() {
+      initApp();
+    });
+  </script>
+</head>
+<style>
+  body,
+  html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+</style>
+
+<body style="background-color:AliceBlue;">
+    <div class="row" style="background-color:Navy;">
+    <div class="col">
+      <h1 align="center" style="color:white;">Virtual Hour</h1>
+      <p align="center" style="color:white;"> <i>An Online Platform for Office Hours </i></p>
+    </div>
+  </div>
+  <br>
+  <iframe id="iframe" src="https://script.google.com/macros/s/AKfycbytheILvHSlL8jsLSLprnvvIOXDyOcws81782lrTjvbp9sUZ6jb/exec" height="100%"></iframe>
+
+  <div class="footer">
+    <div class="row">
+      <div class="col">
+        <hr>
+        <p><i>This platform is created by <a href="https://www.linkedin.com/in/vrajshroff"> Vraj Shroff</a>. If you have any questions, please email <a href="mailto:vshroff@sas.upenn.edu">vshroff@sas.upenn.edu</a>.</i></p>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+
 </html>

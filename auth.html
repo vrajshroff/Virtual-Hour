@@ -26,7 +26,7 @@
   <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css" />
   <script type="text/javascript">
     var uiConfig = {
-      signInSuccessUrl: 'window.location.href',
+      signInSuccessUrl: 'create.html',
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID
       ],
@@ -37,19 +37,15 @@
     ui.start('#firebaseui-auth-container', uiConfig);
   </script>
 </head>
-<style>
-  body,
-  html {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
 
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
+<style>
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
 </style>
 
 <body style="background-color:AliceBlue;">
@@ -68,15 +64,15 @@
       <hr>
     </div>
   </div>
-  <iframe id="iframe" src="https://script.google.com/macros/s/AKfycbytheILvHSlL8jsLSLprnvvIOXDyOcws81782lrTjvbp9sUZ6jb/exec" height="100%"></iframe>
-<script>
-  var firbaseDiv = document.getElementById('firebaseDiv');
-  firbaseDiv.style.display = 'block';
 
-  var iframe = document.getElementById('iframe');
-  iframe.style.display = 'none';
-</script>
-
+  <div class="footer">
+    <div class="row">
+      <div class="col">
+        <hr>
+        <p><i>This platform is created by <a href="https://www.linkedin.com/in/vrajshroff"> Vraj Shroff</a>. If you have any questions, please email <a href="mailto:vshroff@sas.upenn.edu">vshroff@sas.upenn.edu</a>.</i></p>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
