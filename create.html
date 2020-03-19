@@ -98,7 +98,7 @@
 
         var db = firebase.firestore();
         db.collection("classes").doc(classID).set({
-            password: password,
+            password: newPassword,
             adminNum: adminNum,
             tas: emails,
             creator: firebase.auth().currentUser.displayName,
