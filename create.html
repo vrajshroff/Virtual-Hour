@@ -117,7 +117,7 @@
           })
           .catch(function(error) {
             document.getElementById("error").innerHTML =
-              'Error Occured. Possible Reasons:\n1. Class ID already taken. Please try again with a new, more specific class ID.\n2.You are not logged in with your school email. Go back to the home page and try again.\n3.The maximum number of TA per OH is not in the range of [1, 10].\n4.The format of emails of all TAs is invalid or too many emails were entered.\n5.It is quite likely it was a one time problem and just trying again by going to the home page will resolve the issue.\n\n Contact Vraj Shroff, vshroff@sas.upenn.edu, if the porblem persists.';
+              '<b>Error Occured. A Few of the Possible Reasons<b>:<br>1. Class ID already taken. Please try again with a new, more specific class ID.<br>2. You are not logged in with your school email. <a href="auth.html">Go back to the home page</a> and try again.<br>3. The maximum number of TA per OH is not in the range of [1, 10].<br>4. The format of emails of all TAs is invalid or too many emails were entered.<br> 5.It is quite likely that it was a one time error and just <a href="auth.html"> trying again </a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the porblem persists.';
             document.getElementById("createButton").disabled = false;
           });
       }
