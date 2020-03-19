@@ -10,7 +10,6 @@
   <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-firestore.js"></script>
   <script>
-
     var firebaseConfig = {
       apiKey: "AIzaSyCwnSJODwjoQxsueGtoiIwAcNxo9Y6Zt78",
       authDomain: "virtual-hour.firebaseapp.com",
@@ -23,6 +22,20 @@
     };
     firebase.initializeApp(firebaseConfig);
   </script>
+
+  <script type="text/javascript">
+    initApp = function() {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {} else {}
+      }, function(error) {
+        console.log(error);
+      });
+    };
+    window.addEventListener('load', function() {
+      initApp();
+    });
+  </script>
+
 </head>
 
 <style>
@@ -78,11 +91,13 @@
 
         if (!classID || !adminNum || !newPassword || !emails) {
           document.getElementById("error").innerHTML = 'Fill out all the fields above.';
+          document.getElementById("createButton").disabled = false;
           return;
         }
 
         if (!/^\d+$/.test(adminNum) || adminNum < 1 || adminNum > 10) {
           document.getElementById("error").innerHTML = 'Enter a valid number of TAs, > 0 and < 11.';
+          document.getElementById("createButton").disabled = false;
           return;
         }
 
@@ -94,6 +109,11 @@
               email: emailsRaw[i]
             });
           }
+        }
+
+        if (!firebase.auth()) {
+          document.getElementById("error").innerHTML = 'Virtual Hour created successfully for the class.';
+          document.getElementById("createButton").disabled = false;
         }
 
         var db = firebase.firestore();
