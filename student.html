@@ -91,7 +91,7 @@
           })
           .then(function() {
             document.getElementById("error").innerHTML = "";
-            document.getElementById("status").innerHTML = "";
+            document.getElementById("status").innerHTML = "You were added to the queue.";
             document.getElementById("class").innerHTML = "Welcome to class, " + classID;
             document.getElementById("addToQueue").disabled = false;
           })
@@ -120,6 +120,7 @@
             document.getElementById("error").innerHTML = "";
             document.getElementById("status").innerHTML = "";
             document.getElementById("class").innerHTML = "Welcome to class, " + classID;
+            console.log("Displaying Queue.")
             querySnapshot.forEach(function(doc) {
               console.log(doc.id, " => ", doc.data());
             });
