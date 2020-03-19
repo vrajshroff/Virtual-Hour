@@ -112,14 +112,14 @@
         }
 
         if (!firebase.auth()) {
-          document.getElementById("error").innerHTML = 'Virtual Hour created successfully for the class.';
-          document.getElementById("createButton").disabled = false;
+          window.location.href = "auth.html";
+          return;
         }
 
         var db = firebase.firestore();
         db.collection("classes").doc(classID).set({
             password: newPassword,
-            adminNum: adminNum,
+            adminNum: Number(adminNum),
             tas: emails,
             creator: firebase.auth().currentUser.displayName,
             email: firebase.auth().currentUser.email,
