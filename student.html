@@ -124,6 +124,7 @@
             console.log("Displaying Queue.")
             var allStudents = [];
             querySnapshot.forEach(function(doc) {
+              console.log(doc.id, " => ", doc.data());
               var temp = Object.values(doc.data());
               allStudents.push();
             });
