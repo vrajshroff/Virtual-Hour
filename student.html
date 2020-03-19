@@ -40,6 +40,13 @@
 
 </head>
 
+<style>
+  table,
+  td {
+    border: 1px solid black;
+  }
+</style>
+
 <body style="background-color:AliceBlue;">
   <div class="container-fluid">
     <div class="row" style="background-color:Navy;">
@@ -121,10 +128,11 @@
             document.getElementById("error").innerHTML = "";
             document.getElementById("status").innerHTML = "";
             document.getElementById("class").innerHTML = "Welcome to class, " + classID;
-            console.log("Displaying Queue.")
             var allStudents = [];
             querySnapshot.forEach(function(doc) {
               var temp = Object.values(doc.data());
+              temp.splice(1, 1);
+              temp.splice(1, 1);
               allStudents.push(temp);
             });
             createTable(allStudents, document.getElementById("queueTable"));
