@@ -154,11 +154,19 @@
         tableData.forEach(function(rowData) {
           var row = document.createElement('tr');
 
-          rowData.forEach(function(cellData) {
-            var cell = document.createElement('td');
-            cell.appendChild(document.createTextNode(cellData));
-            row.appendChild(cell);
-          });
+          for (var i = 0; i < rowData.length; i++) {
+            if (i == 1) {
+              var cell = document.createElement('td');
+              var span = document.createElement('span');
+              span.innerHTML = '<a href="' + rowData[i] + '">Join the Virtual Room</a>'
+              cell.appendChild(span);
+              row.appendChild(cell);
+            } else {
+              var cell = document.createElement('td');
+              cell.appendChild(document.createTextNode(rowData[i]));
+              row.appendChild(cell);
+            }
+          }
 
           tableBody.appendChild(row);
         });
