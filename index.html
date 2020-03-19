@@ -82,7 +82,7 @@
     function facultyLogIn() {
       var id = document.getElementById("facultyClassroomID").value;
       if (!id.trim()) {
-        document.getElementById("facultyLogIn").innerHTML = "<br>Enter valid class ID."
+        document.getElementById("FacultyError").innerHTML = "<br>Enter valid class ID."
         return;
       }
       location.href = 'auth.html?websiteId=faculty.html&givenID=' + id;
