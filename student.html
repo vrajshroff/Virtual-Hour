@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Create Virtual Hour</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-firestore.js"></script>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyCwnSJODwjoQxsueGtoiIwAcNxo9Y6Zt78",
+      authDomain: "virtual-hour.firebaseapp.com",
+      databaseURL: "https://virtual-hour.firebaseio.com",
+      projectId: "virtual-hour",
+      storageBucket: "virtual-hour.appspot.com",
+      messagingSenderId: "721474763020",
+      appId: "1:721474763020:web:ea4e55f0bc329695d53129",
+      measurementId: "G-TNVC2J28C0"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    initApp = function() {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {} else {
+          location.href = 'auth.html';
+        }
+      }, function(error) {
+        console.log(error);
+      });
+    };
+    window.addEventListener('load', function() {
+      initApp();
+    });
+  </script>
+
+</head>
+
+<body style="background-color:AliceBlue;">
+  <div class="container-fluid">
+    <div class="row" style="background-color:Navy;">
+      <div class="col">
+        <h1 align="center" style="color:white;">Virtual Hour</h1>
+        <p align="center" style="color:white;"> <i>An Online Platform for Office Hours </i></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <br>
+        <h3>Work in Progress</h3>
+        <br>
+      </div>
+    </div>
+
+    <script>
+      function create() {
+        document.getElementById("createButton").disabled = true;
+
+        var classID = document.getElementById("classID").value;
+        var adminNum = document.getElementById("adminNum").value;
+        var emailsRaw = document.getElementById("emails").value;
+        var emails = [];
+
+        if (!classID || !adminNum || !emails) {
+          document.getElementById("error").innerHTML = 'Fill out all of the fields above.';
+          document.getElementById("createButton").disabled = false;
+          return;
+        }
+
+        if (!/^\d+$/.test(adminNum) || adminNum < 1 || adminNum > 10) {
+          document.getElementById("error").innerHTML = 'Enter valid number of TAs, > 0 and < 11.';
+          document.getElementById("createButton").disabled = false;
+          return;
+        }
+
+        emailsRaw = emailsRaw.split(",");
+        for (var i = 0; i < emailsRaw.length; i++) {
+          emailsRaw[i] = emailsRaw[i].trim();
+          if (emailsRaw[i]) {
+            emails.push(emailsRaw[i]);
+          }
+        }
+
+        if (!firebase.auth() || !firebase.auth().currentUser) {
+          window.location.href = "auth.html";
+          return;
+        }
+
+        var db = firebase.firestore();
+        db.collection("classes").doc(classID).set({
+            adminNum: Number(adminNum),
+            tas: emails,
+            creator: firebase.auth().currentUser.displayName,
+            email: firebase.auth().currentUser.email,
+            links: []
+          })
+          .then(function() {
+            document.getElementById("error").innerHTML = 'Virtual Hour created successfully for the class.\nPlease share this class ID with your students: ' + classID;
+            document.getElementById("createButton").disabled = false;
+          })
+          .catch(function(error) {
+            document.getElementById("error").innerHTML =
+              '<b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID already taken. Please try again with a new, more specific class ID.<br>2. You are not logged in with your school email. <a href="auth.html">Go back to the home page</a> and try again.<br>3. The maximum number of TA per OH is not in the range of [1, 10].<br>4. The format of emails of all TAs is invalid or too many emails were entered.<br> 5.It is quite likely that it was a one time error and just <a href="auth.html"> trying again </a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            document.getElementById("createButton").disabled = false;
+          });
+      }
+    </script>
+
+  </div>
+</body>
+
+
+</html>
