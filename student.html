@@ -126,8 +126,10 @@
             querySnapshot.forEach(function(doc) {
               console.log(doc.id, " => ", doc.data());
               var temp = Object.values(doc.data());
+              console.log(temp);
               allStudents.push();
             });
+            console.log(allStudents);
             createTable(allStudents, document.getElementById("queueTable"));
 
           })
