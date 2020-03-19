@@ -87,7 +87,7 @@
             creator: firebase.auth().currentUser.displayName,
             email: firebase.auth().currentUser.email,
             datetime: Date.now(),
-            needHelp: true
+            needHelp: ""
           })
           .then(function() {
             document.getElementById("error").innerHTML = "";
@@ -112,7 +112,7 @@
           window.location.href = "index.html";
           return;
         }
-        db.collection("classes").doc(classID).collection("students").where("needHelp", "==", true)
+        db.collection("classes").doc(classID).collection("students").where("needHelp", "==", "")
           .get()
           .then(function(querySnapshot) {
             document.getElementById("seeQueue").disabled = false;
