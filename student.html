@@ -27,7 +27,7 @@
         if (user) {
 
         } else {
-          //location.href = 'auth.html';
+          location.href = 'auth.html';
         }
       }, function(error) {
         console.log(error);
@@ -56,7 +56,7 @@
         <p style="color:red;" id="error"></p>
         <h5 id="class"></h5><br>
         <button id="addToQueue" class="btn btn-info" onclick="addToQueue()">Join the Queue</button>
-        <button id="seeQueue" class="btn btn-info" onclick="See Queue()">See the Queue</button>
+        <button id="seeQueue" class="btn btn-info" onclick="seeQueue()">See the Queue</button>
         <p style="color:red;" id="status"></p><br>
       </div>
     </div>
@@ -65,6 +65,8 @@
       var classID = getParameterByName("givenID");
       if (classID && classID.trim()) {} else {
         document.getElementById("error").innerHTML = 'Invalid Class ID. <a href="index.html">Please try again.</a>';
+        document.getElementById("addToQueue").disabled = true;
+        document.getElementById("seeQueue").disabled = true;
       }
 
       function getParameterByName(name) {
@@ -73,8 +75,8 @@
       }
 
       function addToQueue() {
+        document.getElementById("addToQueue").disabled = true;
         var db = firebase.firestore();
-
 
         if (!firebase.auth() || !firebase.auth().currentUser) {
           window.location.href = "index.html";
@@ -91,13 +93,48 @@
             document.getElementById("error").innerHTML = "";
             document.getElementById("status").innerHTML = "";
             document.getElementById("class").innerHTML = "Welcome to class, " + classID;
+            document.getElementById("addToQueue").disabled = false;
           })
           .catch(function(error) {
             document.getElementById("error").innerHTML = "";
             document.getElementById("class").innerHTML = "";
             document.getElementById("status").innerHTML =
               '<br><b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            document.getElementById("addToQueue").disabled = false;
           });
+      }
+
+      function seeQueue() {
+        document.getElementById("seeQueue").disabled = true;
+
+        var db = firebase.firestore();
+        if (!firebase.auth() || !firebase.auth().currentUser) {
+          window.location.href = "index.html";
+          return;
+        }
+        db.collection("classes").doc(classID).collection("students").where("needHelp", "==", true)
+          .get()
+          .then(function(querySnapshot) {
+            document.getElementById("seeQueue").disabled = false;
+
+            document.getElementById("error").innerHTML = "";
+            document.getElementById("status").innerHTML = "";
+            document.getElementById("class").innerHTML = "Welcome to class, " + classID;
+            querySnapshot.forEach(function(doc) {
+              console.log(doc.id, " => ", doc.data());
+            });
+
+          })
+          .catch(function(error) {
+            document.getElementById("seeQueue").disabled = false;
+
+            document.getElementById("error").innerHTML = "";
+            document.getElementById("class").innerHTML = "";
+            document.getElementById("status").innerHTML =
+              '<br><b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            console.log("Error getting documents: ", error);
+          });
+
       }
     </script>
 
