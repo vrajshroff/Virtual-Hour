@@ -97,10 +97,8 @@
         return;
       }
 
-      db.collection("classes").doc(classID).collection("students").doc(firebase.auth().currentUser.uid).set({
+      db.collection("classes").doc(classID).collection("students").doc(Date.now()).set({
           creator: firebase.auth().currentUser.displayName,
-          email: firebase.auth().currentUser.email,
-          timeAdded: Date.now(),
           needHelp: ""
         })
         .then(function() {
@@ -128,12 +126,11 @@
         window.location.href = "index.html";
         return;
       }
-      db.collection("classes").doc(classID).collection("students").where("needHelp", "==", "").orderBy("timeAdded")
+      db.collection("classes").doc(classID).collection("students").where("needHelp", "==", "")
         .get()
         .then(function(querySnapshot) {
           console.log("In then");
           document.getElementById("seeQueue").disabled = false;
-
           document.getElementById("error").innerHTML = "";
           document.getElementById("status").innerHTML = "";
           document.getElementById("class").innerHTML = "Welcome to class, " + classID;
@@ -142,8 +139,6 @@
             console.log(doc.id, " => ", doc.data());
             var temp = Object.values(doc.data());
             console.log(temp);
-            temp.splice(1, 1);
-            temp.splice(2, 1);
             allStudents.push(temp);
           });
           createTable(allStudents, document.getElementById("queueTable"));
@@ -172,6 +167,10 @@
             var span = document.createElement('span');
             span.innerHTML = '<a href="' + rowData[i] + '">Join the Virtual Room</a>'
             cell.appendChild(span);
+            row.appendChild(cell);
+          } else if (i == 1 && !rowData[i]) {
+            var cell = document.createElement('td');
+            cell.appendChild(document.createTextNode("Waiting for TA"));
             row.appendChild(cell);
           } else {
             var cell = document.createElement('td');
