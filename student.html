@@ -120,6 +120,7 @@
     }
 
     function seeQueue() {
+      console.log("In seeQueue");
       document.getElementById("seeQueue").disabled = true;
 
       var db = firebase.firestore();
@@ -130,6 +131,7 @@
       db.collection("classes").doc(classID).collection("students").where("needHelp", "==", "").orderBy("datetime")
         .get()
         .then(function(querySnapshot) {
+          console.log("In then");
           document.getElementById("seeQueue").disabled = false;
 
           document.getElementById("error").innerHTML = "";
