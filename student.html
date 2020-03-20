@@ -125,7 +125,7 @@
         window.location.href = "index.html";
         return;
       }
-      db.collection("classes").doc(classID).collection("students").where("needHelp", "==", "").orderBy("timeAdded")
+      db.collection("classes").doc(classID).collection("students").orderBy("timeAdded")
         .get()
         .then(function(querySnapshot) {
           var allStudents = [];
@@ -163,16 +163,20 @@
           if (i == 1 && rowData[i]) {
             var cell = document.createElement('td');
             var span = document.createElement('span');
-            span.innerHTML = '<a href="' + rowData[i] + '">Join the Virtual Room</a>'
+            span.innerHTML = '&nbsp;&nbsp;<a href="' + rowData[i] + '">Join the Virtual Room</a>&nbsp;&nbsp;'
             cell.appendChild(span);
             row.appendChild(cell);
           } else if (i == 1 && !rowData[i]) {
             var cell = document.createElement('td');
-            cell.appendChild(document.createTextNode("Waiting for TA"));
+            var span = document.createElement('span');
+            span.innerHTML = '&nbsp;&nbsp;<i>Waiting for a TA</i>&nbsp;&nbsp;'
+            cell.appendChild(span);
             row.appendChild(cell);
           } else {
             var cell = document.createElement('td');
-            cell.appendChild(document.createTextNode(rowData[i]));
+            var span = document.createElement('span');
+            span.innerHTML = '&nbsp;&nbsp; ' + rowData[i] + ' &nbsp;&nbsp;'
+            cell.appendChild(span);
             row.appendChild(cell);
           }
         }
