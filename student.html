@@ -97,7 +97,7 @@
         return;
       }
 
-      db.collection("classes").doc(classID).collection("students").doc(Date.now()).set({
+      db.collection("classes").doc(classID).collection("students").doc(String(Date.now())).set({
           creator: firebase.auth().currentUser.displayName,
           needHelp: ""
         })
