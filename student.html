@@ -101,7 +101,7 @@
       db.collection("classes").doc(classID).collection("students").doc(firebase.auth().currentUser.uid).set({
           creator: firebase.auth().currentUser.displayName,
           email: firebase.auth().currentUser.email,
-          datetime: Date.now(),
+          timeAdded: Date.now(),
           needHelp: ""
         })
         .then(function() {
@@ -128,7 +128,7 @@
         window.location.href = "index.html";
         return;
       }
-      db.collection("classes").doc(classID).collection("students").where("needHelp", "==", "").orderBy("datetime")
+      db.collection("classes").doc(classID).collection("students").where("needHelp", "==", "").orderBy("timeAdded")
         .get()
         .then(function(querySnapshot) {
           console.log("In then");
@@ -154,6 +154,7 @@
           document.getElementById("class").innerHTML = "";
           document.getElementById("status").innerHTML =
             '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+          console.log("Error: " + error);
         });
     }
 
