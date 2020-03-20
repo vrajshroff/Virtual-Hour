@@ -98,8 +98,8 @@
 
       db.collection("classes").doc(classID).collection("students").doc(firebase.auth().currentUser.uid).set({
           creator: firebase.auth().currentUser.displayName,
-          timeAdded: Date.now(),
-          needHelp: ""
+          needHelp: "",
+          timeAdded: Date.now()
         })
         .then(function() {
           document.getElementById("error").innerHTML = "";
@@ -132,7 +132,7 @@
           querySnapshot.forEach(function(doc) {
             console.log(doc.id, " => ", doc.data());
             var temp = Object.values(doc.data());
-            temp.splice(0, 1);
+            temp.splice(2, 1);
             allStudents.push(temp);
           });
           createTable(allStudents, document.getElementById("queueTable"));
@@ -151,9 +151,7 @@
       document.getElementById("seeQueue").disabled = false;
       document.getElementById("error").innerHTML = "";
       document.getElementById("status").innerHTML = "";
-      document.getElementById("class").innerHTML = "Welcome to class, " + classID;
-
-      return;
+      document.getElementById("class").innerHTML = "Welcome to class " + classID;
 
       table.innerHTML = "";
       var tableBody = document.createElement('tbody');
@@ -178,15 +176,12 @@
             row.appendChild(cell);
           }
         }
-
         tableBody.appendChild(row);
       });
-
       table.appendChild(tableBody);
       document.body.appendChild(table);
     }
   </script>
 </body>
-
 
 </html>
