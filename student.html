@@ -37,7 +37,6 @@
       initApp();
     });
   </script>
-
 </head>
 
 <style>
@@ -97,8 +96,9 @@
         return;
       }
 
-      db.collection("classes").doc(classID).collection("students").doc(String(Date.now())).set({
+      db.collection("classes").doc(classID).collection("students").doc(firebase.auth().currentUser.uid).set({
           creator: firebase.auth().currentUser.displayName,
+          timeAdded: Date.now(),
           needHelp: ""
         })
         .then(function() {
@@ -117,74 +117,7 @@
         });
     }
 
-    function seeQueue() {
-      console.log("In seeQueue");
-      document.getElementById("seeQueue").disabled = true;
-
-      var db = firebase.firestore();
-      if (!firebase.auth() || !firebase.auth().currentUser) {
-        window.location.href = "index.html";
-        return;
-      }
-      db.collection("classes").doc(classID).collection("students").where("needHelp", "==", "")
-        .get()
-        .then(function(querySnapshot) {
-          console.log("In then");
-          document.getElementById("seeQueue").disabled = false;
-          document.getElementById("error").innerHTML = "";
-          document.getElementById("status").innerHTML = "";
-          document.getElementById("class").innerHTML = "Welcome to class, " + classID;
-          var allStudents = [];
-          querySnapshot.forEach(function(doc) {
-            console.log(doc.id, " => ", doc.data());
-            var temp = Object.values(doc.data());
-            console.log(temp);
-            allStudents.push(temp);
-          });
-          createTable(allStudents, document.getElementById("queueTable"));
-        })
-        .catch(function(error) {
-          document.getElementById("seeQueue").disabled = false;
-
-          document.getElementById("error").innerHTML = "";
-          document.getElementById("class").innerHTML = "";
-          document.getElementById("status").innerHTML =
-            '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
-          console.log("Error: " + error);
-        });
-    }
-
-    function createTable(tableData, table) {
-      table.innerHTML = "";
-      var tableBody = document.createElement('tbody');
-
-      tableData.forEach(function(rowData) {
-        var row = document.createElement('tr');
-
-        for (var i = 0; i < rowData.length; i++) {
-          if (i == 1 && rowData[i]) {
-            var cell = document.createElement('td');
-            var span = document.createElement('span');
-            span.innerHTML = '<a href="' + rowData[i] + '">Join the Virtual Room</a>'
-            cell.appendChild(span);
-            row.appendChild(cell);
-          } else if (i == 1 && !rowData[i]) {
-            var cell = document.createElement('td');
-            cell.appendChild(document.createTextNode("Waiting for TA"));
-            row.appendChild(cell);
-          } else {
-            var cell = document.createElement('td');
-            cell.appendChild(document.createTextNode(rowData[i]));
-            row.appendChild(cell);
-          }
-        }
-
-        tableBody.appendChild(row);
-      });
-
-      table.appendChild(tableBody);
-      document.body.appendChild(table);
-    }
+    function seeQueue() {}
   </script>
 </body>
 
