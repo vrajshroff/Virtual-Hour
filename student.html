@@ -27,7 +27,7 @@
         if (user) {
 
         } else {
-          location.href = 'auth.html';
+          location.href = 'index.html';
         }
       }, function(error) {
         console.log(error);
@@ -64,11 +64,11 @@
       <div class="col">
         <br>
         <h3>Student Login For Virtual Hour</h3>
-        <p style="color:red;" id="error"></p>
+        <p style="color:red;" id="error">Do not "Join the Queue" if you are already in the queue. If you do, you will be moved back to the end of the queue.</p>
         <h5 id="class"></h5><br>
         <button style="width:150px; max-width:90vp" id="addToQueue" class="btn btn-info" onclick="addToQueue()">Join the Queue</button> <br><br>
         <button style="width:150px; max-width:90vp" id="seeQueue" class="btn btn-info" onclick="seeQueue()">See the Queue</button>
-        <p style="color:red;" id="status"></p><br><br>
+        <p style="color:red;" id="status"></p>
         <table id="queueTable"></table>
       </div>
     </div>
@@ -76,6 +76,10 @@
 
   <script>
     var classID = getParameterByName("givenID");
+    var db = firebase.firestore();
+    var unsubscribe = null;
+
+
     if (classID && classID.trim()) {} else {
       document.getElementById("error").innerHTML = 'Invalid Class ID. <a href="index.html">Please try again.</a>';
       document.getElementById("addToQueue").disabled = true;
@@ -89,7 +93,6 @@
 
     function addToQueue() {
       document.getElementById("addToQueue").disabled = true;
-      var db = firebase.firestore();
 
       if (!firebase.auth() || !firebase.auth().currentUser) {
         window.location.href = "index.html";
@@ -102,10 +105,7 @@
           timeAdded: Date.now()
         })
         .then(function() {
-          document.getElementById("error").innerHTML = "";
-          document.getElementById("status").innerHTML = "You were added to the queue.";
-          document.getElementById("class").innerHTML = "Welcome to class, " + classID;
-          document.getElementById("addToQueue").disabled = false;
+          seeQueue();
         })
         .catch(function(error) {
           document.getElementById("error").innerHTML = "";
@@ -120,24 +120,26 @@
     function seeQueue() {
       document.getElementById("seeQueue").disabled = true;
 
-      var db = firebase.firestore();
       if (!firebase.auth() || !firebase.auth().currentUser) {
         window.location.href = "index.html";
         return;
       }
-      db.collection("classes").doc(classID).collection("students").orderBy("timeAdded")
-        .get()
-        .then(function(querySnapshot) {
+
+      unsubscribe = db.collection("classes").doc(classID).collection("students").orderBy("timeAdded")
+        .onSnapshot(function(querySnapshot) {
           var allStudents = [];
+          document.getElementById("error").innerHTML = "";
+          document.getElementById("status").innerHTML = "<br><b>Queue for the class:</b>";
+          document.getElementById("class").innerHTML = "Welcome to class, " + classID;
+
           querySnapshot.forEach(function(doc) {
             console.log(doc.id, " => ", doc.data());
             var temp = Object.values(doc.data());
             temp.splice(2, 1);
             allStudents.push(temp);
           });
-          createTable(allStudents, document.getElementById("queueTable"));
-        })
-        .catch(function(error) {
+          createTable(allStudents);
+        }, function(error) {
           document.getElementById("seeQueue").disabled = false;
           document.getElementById("error").innerHTML = "";
           document.getElementById("class").innerHTML = "";
@@ -148,11 +150,7 @@
     }
 
     function createTable(tableData, table) {
-      document.getElementById("seeQueue").disabled = false;
-      document.getElementById("error").innerHTML = "";
-      document.getElementById("status").innerHTML = "";
-      document.getElementById("class").innerHTML = "Welcome to class " + classID;
-
+      var table = document.getElementById("queueTable");
       table.innerHTML = "";
       var tableBody = document.createElement('tbody');
 
@@ -185,6 +183,16 @@
       table.appendChild(tableBody);
       document.body.appendChild(table);
     }
+
+    document.addEventListener("visibilitychange", function() {
+      if (document.visibilityState === 'visible') {
+        if (unsubscribe) {
+          seeQueue();
+        }
+      } else {
+        unsubscribe();
+      }
+    });
   </script>
 </body>
 
