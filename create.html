@@ -109,7 +109,8 @@
             tas: emails,
             creator: firebase.auth().currentUser.displayName,
             email: firebase.auth().currentUser.email,
-            links: []
+            links: [],
+            status: false
           })
           .then(function() {
             document.getElementById("error").innerHTML = 'Virtual Hour created successfully for the class.\nPlease share this class ID with your students: ' + classID;

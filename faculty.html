@@ -75,7 +75,10 @@
         <label id="roomNumberLabel" for="roomNumber" style="display:none">Your Virtual Room Number</label>
         <input type="number" min=0 max=10 id="roomNumber" value="0" style="display:none">
         <p id="roomNums"></p>
-        <button style="margin:10px; width:175px; max-width:90vp" id="addToQueue" class="btn btn-info" onclick="addToQueue()">Help Next Student</button>
+        <button style="margin:10px; width:175px; max-width:90vp" id="helpNext" class="btn btn-primary" onclick="helpNext()">Help Next Student</button><br>
+        <button style="margin:10px; width:175px; max-width:90vp" id="startQueue" class="btn btn-success" onclick="changeQueueSetting(true)">Start Queue</button><br>
+        <button style="margin:10px; width:175px; max-width:90vp" id="stopQueue" class="btn btn-danger" onclick="changeQueueSetting(false)">Stop Queue</button><br>
+
         <p style="color:red;" id="status"></p>
         <table id="queueTable"></table>
       </div>
@@ -99,23 +102,31 @@
             document.getElementById("roomNums").innerHTML = "<i>Please select a room number from 0 to " + (links.length - 1) + ". Ask other TAs holding this office hours with you to select a different number.</i>";
             document.getElementById("roomNumber").style.display = block;
             document.getElementById("roomNumberLabel").style.display = block;
-
           }
           setMeetingRooms();
           seeQueue();
         } else {
           document.getElementById("status").innerHTML =
-            '<br><b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            '<br><b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+          document.getElementById('startQueue').disabled = true;
+          document.getElementById('helpNext').disabled = true;
+          document.getElementById('stopQueue').disabled = true;
           console.log("No such document!");
         }
       }).catch(function(error) {
         document.getElementById("status").innerHTML =
           '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
-        console.log("Error getting document:", error);
+        document.getElementById('startQueue').disabled = true;
+        document.getElementById('helpNext').disabled = true;
+        document.getElementById('stopQueue').disabled = true;
+        console.log("Error getting document: " + classID, error);
       });
 
     } else {
       document.getElementById("error").innerHTML = 'Invalid Class ID. <a href="index.html">Please try again.</a>';
+      document.getElementById('startQueue').disabled = true;
+      document.getElementById('helpNext').disabled = true;
+      document.getElementById('stopQueue').disabled = true;
     }
 
     function getParameterByName(name) {
@@ -127,13 +138,59 @@
       for (var i = 0; i < links.length; i++) {
         var container = document.getElementById("allRooms");
         var span = document.createElement('span');
-        span.innerHTML = '<button class="btn btn-secondary" style="margin:10px;" onclick="window.open(\'' + links[i] + '\',\'_blank\')">Join Meeting Room ' + i + '</button>';
+        span.innerHTML = '<button style="margin:10px;" onclick="window.open(\'' + links[i] + '\',\'_blank\')">Join Meeting Room ' + i + '</button>';
         container.appendChild(span);
       }
     }
 
+    function helpNext() {
+      var taRoomNum = document.getElementById("roomNumber").value;
+      if (!taRoomNum) {
+        document.getElementById("error").innerHTML = "Enter your virtual room number!";
+        return;
+      }
+      var linkForStudent = links[taRoomNum];
+      var tempRef;
+
+      db.collection("classes").doc(classID).collection("students").where("needHelp", "==", "").orderBy("timeAdded").limit(1)
+        .get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            console.log("Finished Read: " + doc.id);
+            tempRef = db.collection("classes").doc(classID).collection("students").doc(doc.id);
+          });
+
+          if (!tempRef) {
+            console.log("No more available students");
+            document.getElementById("error").innerHTML = "No more students in the queue need help right now.";
+            return;
+          }
+
+          return tempRef.update({
+              needHelp: linkForStudent
+            })
+            .then(function() {
+              document.getElementById("error").innerHTML = "Student asked to join your virtual room. Please wait a moment.";
+            })
+            .catch(function(error) {
+              console.error("Error updating document: ", error);
+              document.getElementById("error").innerHTML =
+                '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+              document.getElementById('startQueue').disabled = true;
+              document.getElementById('stopQueue').disabled = true;
+              document.getElementById('helpNext').disabled = true;
+
+            });
+
+        })
+        .catch(function(error) {
+          console.log("Error getting documents: ", error);
+          //document.getElementById("error").innerHTML = "";
+          //document.getElementById("status").innerHTML = '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+        });
+    }
+
     function seeQueue() {
-      console.log("seeQueue");
       if (!firebase.auth() || !firebase.auth().currentUser) {
         window.location.href = "index.html";
         return;
@@ -142,7 +199,6 @@
       unsubscribe = db.collection("classes").doc(classID).collection("students").orderBy("timeAdded")
         .onSnapshot(function(querySnapshot) {
           var allStudents = [];
-          document.getElementById("error").innerHTML = "";
           document.getElementById("status").innerHTML =
             "<br><p style='color:black;'> <b>How to use?</b><br>'Start Queue' > 'Help Next Student' > 'Join (your) Meeting Room #' > After helping the student, 'Remove from Queue' > Repeat > Finally, remove everyone from the queue and 'Stop Queue'.</p><b>Queue for the class:</b>";
           document.getElementById("class").innerHTML = "Welcome to class, " + classID;
@@ -156,11 +212,38 @@
           });
           createTable(allStudents);
         }, function(error) {
-          document.getElementById("error").innerHTML = "";
-          document.getElementById("class").innerHTML = "";
           document.getElementById("status").innerHTML =
-            '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
           console.log("Error: " + error);
+        });
+    }
+
+    function remove(uid) {
+      db.collection("classes").doc(classID).collection("students").doc(uid).delete().then(function() {}).catch(function(error) {
+        console.error("Error removing document: ", error);
+      });
+    }
+
+    function changeQueueSetting(value) {
+      db.collection("classes").doc(classID).update({
+          status: value
+        })
+        .then(function() {
+          if (value) {
+            document.getElementById('error').innerHTML = "The queue for this class is open now.";
+            document.getElementById('startQueue').disabled = true;
+          } else {
+            document.getElementById('error').innerHTML = "<b>The queue for this class is closed now.</b> Make sure to remove all students from the queue. Refresh the page to start the queue again.";
+            document.getElementById('stopQueue').disabled = true;
+          }
+        })
+        .catch(function(error) {
+          console.error("Error updating document: ", error);
+          document.getElementById("status").innerHTML =
+            '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+          document.getElementById('startQueue').disabled = true;
+          document.getElementById('stopQueue').disabled = true;
+          document.getElementById('helpNext').disabled = true;
         });
     }
 
@@ -190,7 +273,7 @@
           } else if (i == 2) {
             var cell = document.createElement('td');
             var span = document.createElement('span');
-            span.innerHTML = '<button type="button" onclick="remove(' + rowData[2] + ')">Remove from Queue</button>'
+            span.innerHTML = '<button type="button" onclick="remove(\'' + rowData[2] + '\')">Remove from Queue</button>'
             cell.appendChild(span);
             row.appendChild(cell);
           } else {
