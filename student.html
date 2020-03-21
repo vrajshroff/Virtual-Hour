@@ -42,7 +42,8 @@
 <style>
   table {
     border: 1px solid black;
-    margin-left: 20px;
+    margin-left: 15px;
+    margin-right: 15px;
     border-collapse: collapse;
   }
 
@@ -163,18 +164,21 @@
           if (i == 1 && rowData[i]) {
             var cell = document.createElement('td');
             var span = document.createElement('span');
+            span.style.margin = "10px";
             span.innerHTML = '<a target="_blank" href="' + rowData[i] + '">Join the Virtual Room</a>'
             cell.appendChild(span);
             row.appendChild(cell);
           } else if (i == 1 && !rowData[i]) {
             var cell = document.createElement('td');
             var span = document.createElement('span');
+            span.style.margin = "10px";
             span.innerHTML = '<i>Waiting for a TA</i>'
             cell.appendChild(span);
             row.appendChild(cell);
           } else {
             var cell = document.createElement('td');
             var span = document.createElement('span');
+            span.style.margin = "10px";
             span.innerHTML = rowData[i];
             cell.appendChild(span);
             row.appendChild(cell);

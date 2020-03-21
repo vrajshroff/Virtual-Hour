@@ -42,7 +42,8 @@
 <style>
   table {
     border: 1px solid black;
-    margin-left: 20px;
+    margin-left: 15px;
+    margin-right: 15px;
     border-collapse: collapse;
   }
 
@@ -176,12 +177,14 @@
             var cell = document.createElement('td');
             var span = document.createElement('span');
             span.innerHTML = '<a target="_blank" href="' + rowData[i] + '">Getting Help Here</a>';
+            span.style.margin = "10px";
             cell.appendChild(span);
             row.appendChild(cell);
           } else if (i == 1 && !rowData[i]) {
             var cell = document.createElement('td');
             var span = document.createElement('span');
             span.innerHTML = '<i>Waiting for a TA</i>';
+            span.style.margin = "10px";
             cell.appendChild(span);
             row.appendChild(cell);
           } else if (i == 2) {
@@ -193,6 +196,7 @@
           } else {
             var cell = document.createElement('td');
             var span = document.createElement('span');
+            span.style.margin = "10px";
             span.innerHTML = rowData[i];
             cell.appendChild(span);
             row.appendChild(cell);
