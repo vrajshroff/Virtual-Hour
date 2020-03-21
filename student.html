@@ -64,7 +64,7 @@
       <div class="col">
         <br>
         <h3>Student Login For Virtual Hour</h3>
-        <p style="color:red;" id="error">Do not "Join the Queue" if you are already in the queue. If you do, you will be moved back to the end of the queue.</p>
+        <p style="color:red;" id="error">Note: Do not "Join the Queue" if you are already in the queue. If you do, you will be moved back to the end of the queue.</p>
         <h5 id="class"></h5><br>
         <button style="width:150px; max-width:90vp" id="addToQueue" class="btn btn-info" onclick="addToQueue()">Join the Queue</button> <br><br>
         <button style="width:150px; max-width:90vp" id="seeQueue" class="btn btn-info" onclick="seeQueue()">See the Queue</button>
@@ -111,7 +111,7 @@
           document.getElementById("error").innerHTML = "";
           document.getElementById("class").innerHTML = "";
           document.getElementById("status").innerHTML =
-            '<br><b>Join Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            '<br><b>Join Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
           document.getElementById("addToQueue").disabled = false;
           console.log(error);
         });
@@ -144,7 +144,7 @@
           document.getElementById("error").innerHTML = "";
           document.getElementById("class").innerHTML = "";
           document.getElementById("status").innerHTML =
-            '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            '<br><b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
           console.log("Error: " + error);
         });
     }
@@ -161,7 +161,7 @@
           if (i == 1 && rowData[i]) {
             var cell = document.createElement('td');
             var span = document.createElement('span');
-            span.innerHTML = '&nbsp;&nbsp;<a href="' + rowData[i] + '">Join the Virtual Room</a>&nbsp;&nbsp;'
+            span.innerHTML = '&nbsp;&nbsp;<a target="_blank" href="' + rowData[i] + '">Join the Virtual Room</a>&nbsp;&nbsp;'
             cell.appendChild(span);
             row.appendChild(cell);
           } else if (i == 1 && !rowData[i]) {
