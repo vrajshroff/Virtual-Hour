@@ -37,10 +37,7 @@
 
     var uiConfig = {
       signInSuccessUrl: url,
-      signInOptions: [{
-        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        scopes: ['https://www.googleapis.com/auth/calendar.events']
-      }],
+      signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
       tosUrl: '<your-tos-url>',
       privacyPolicyUrl: '<your-privacy-policy-url>'
     };
