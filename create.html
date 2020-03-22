@@ -25,7 +25,7 @@
     initApp = function() {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {} else {
-          location.href = 'auth.html';
+          //location.href = 'auth.html';
         }
       }, function(error) {
         console.log(error);
@@ -122,6 +122,14 @@
       while (links.length != adminNum) {
         await new Promise(r => setTimeout(r, 1000));
       }
+
+      console.log("All inputs");
+      console.log(classID);
+      console.log(adminNum);
+      console.log(emails);
+      console.log(firebase.auth().currentUser.displayName);
+      console.log(links);
+      console.log(false);
 
       var db = firebase.firestore();
       db.collection("classes").doc(classID).set({
