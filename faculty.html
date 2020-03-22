@@ -158,8 +158,8 @@
         return;
       }
 
-      if (Number(taRoomNum) >= link.length || Number(taRoomNum) < 0) {
-        document.getElementById("error").innerHTML = "Enter a virtual room number between 0 and " + (link.length - 1) + " (both inclusive).";
+      if (Number(taRoomNum) >= links.length || Number(taRoomNum) < 0) {
+        document.getElementById("error").innerHTML = "Enter a virtual room number between 0 and " + (links.length - 1) + " (both inclusive).";
         return;
       }
 
@@ -311,7 +311,9 @@
           seeQueue();
         }
       } else {
-        unsubscribe();
+        if (unsubscribe) {
+          unsubscribe();
+        }
       }
     });
   </script>

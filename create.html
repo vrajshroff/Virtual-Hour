@@ -87,6 +87,7 @@
       var adminNum = document.getElementById("adminNum").value;
       var emailsRaw = document.getElementById("emails").value;
       var emails = [];
+      var emailsForDB = [];
       var links = [];
 
       if (!classID || !adminNum || !emailsRaw) {
@@ -114,12 +115,14 @@
           emails.push({
             email: emailsRaw[i]
           });
+          emailsForDB.push(emailsRaw[i]);
         }
       }
       if (!creatorAdded) {
         emails.push({
           email: myEmail
         });
+        emailsForDB.push(myEmail);
       }
 
       document.getElementById("error").innerHTML = "Creating Virtual Hour for your class. Please wait...";
@@ -145,7 +148,7 @@
       console.log("All inputs");
       console.log(classID);
       console.log(adminNum);
-      console.log(emails);
+      console.log(emailsForDB);
       console.log(firebase.auth().currentUser.displayName);
       console.log(links);
       console.log(false); //for the sake of completness -- this is the class queue status
@@ -153,7 +156,7 @@
       var db = firebase.firestore();
       db.collection("classes").doc(classID).set({
           adminNum: Number(adminNum),
-          tas: emails,
+          tas: emailsForDB,
           creator: firebase.auth().currentUser.displayName,
           email: firebase.auth().currentUser.email,
           links: links,

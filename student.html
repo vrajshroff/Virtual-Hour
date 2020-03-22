@@ -190,7 +190,9 @@
           seeQueue(); //this is done to decrease the number of simultaneous connections to the DB at the cost of more reads
         }
       } else {
-        unsubscribe();
+        if (unsubscribe) {
+          unsubscribe();
+        }
       }
     });
   </script>
