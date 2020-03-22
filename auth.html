@@ -21,14 +21,15 @@
     };
     firebase.initializeApp(firebaseConfig);
   </script>
-
   <script src="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.js"></script>
   <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css" />
-  <script type="text/javascript">
+
+  <script>
     function getParameterByName(name) {
       var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
       return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
     }
+
     var url = getParameterByName("websiteId");
     var parm = getParameterByName("givenID");
     if (parm) {
@@ -38,8 +39,8 @@
     var uiConfig = {
       signInSuccessUrl: url,
       signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-      tosUrl: '<your-tos-url>',
-      privacyPolicyUrl: '<your-privacy-policy-url>'
+      tosUrl: 'about.html',
+      privacyPolicyUrl: 'about.html'
     };
     var ui = new firebaseui.auth.AuthUI(firebase.auth());
     ui.start('#firebaseui-auth-container', uiConfig);
@@ -54,9 +55,14 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col">
+      <br><br>
+    </div>
+  </div>
+
   <div class="row" id="firebaseDiv">
     <div class="col">
-      <br>
       <h5 align="center">Sign in to your school account</h5>
       <div id="firebaseui-auth-container"></div>
     </div>
