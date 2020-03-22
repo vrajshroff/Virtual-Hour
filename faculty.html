@@ -114,7 +114,7 @@
           seeQueue();
         } else {
           document.getElementById("status").innerHTML =
-            '<b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            '<b>Error Occurred. Few of the Possible Reasons</b>:<br>1. The Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
           document.getElementById("error").innerHTML = '';
           document.getElementById('startQueue').disabled = true;
           document.getElementById('helpNext').disabled = true;
@@ -123,7 +123,7 @@
         }
       }).catch(function(error) {
         document.getElementById("status").innerHTML =
-          '<b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu">Vraj Shroff</a> if the problem persists.';
+          '<b>Error Occurred. Few of the Possible Reasons</b>:<br>1. The Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu">Vraj Shroff</a> if the problem persists.';
         document.getElementById('startQueue').disabled = true;
         document.getElementById('helpNext').disabled = true;
         document.getElementById('stopQueue').disabled = true;
@@ -189,7 +189,7 @@
             .catch(function(error) {
               console.error("Error updating document: ", error);
               document.getElementById("error").innerHTML =
-                '<b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+                '<b>Error Occurred. Few of the Possible Reasons</b>:<br>1. The Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
               document.getElementById('startQueue').disabled = true;
               document.getElementById('stopQueue').disabled = true;
               document.getElementById('helpNext').disabled = true;
@@ -199,7 +199,7 @@
         .catch(function(error) {
           console.error("Error updating document: ", error);
           document.getElementById("error").innerHTML =
-            '<b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            '<b>Error Occurred. Few of the Possible Reasons</b>:<br>1. The Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
           document.getElementById('startQueue').disabled = true;
           document.getElementById('stopQueue').disabled = true;
           document.getElementById('helpNext').disabled = true;
@@ -224,7 +224,7 @@
           createTable(allStudents);
         }, function(error) {
           document.getElementById("status").innerHTML =
-            '<b>See Queue: Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+            '<b>See Queue: Error Occurred. Few of the Possible Reasons</b>:<br>1. The Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
           console.log("Error: " + error);
           document.getElementById('startQueue').disabled = true;
           document.getElementById('stopQueue').disabled = true;
@@ -237,7 +237,7 @@
     function remove(uid) {
       db.collection("classes").doc(classID).collection("students").doc(uid).delete().then(function() {}).catch(function(error) {
         console.error("Error removing document: ", error);
-        document.getElementById('error').innerHTML = "Error occured. Please try again.";
+        document.getElementById('error').innerHTML = "Error occurred. Please try again.";
       });
     }
 
@@ -255,7 +255,7 @@
         .catch(function(error) {
           console.error("Error updating document: ", error);
           document.getElementById("status").innerHTML =
-            'Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu">Vraj Shroff</a> if the problem persists.';
+            'Error Occurred. Few of the Possible Reasons</b>:<br>1. The Class ID is invalid. <a href="index.html">Try again</a> with a correct class ID.<br>2. You are not logged in with your school email. <a href="index.html">Go back to the home page</a> and try again.<br>3. You are not an assigned TA for the class.<br>4. It is quite likely that it was a one time error and just <a href="index.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu">Vraj Shroff</a> if the problem persists.';
           document.getElementById('startQueue').disabled = true;
           document.getElementById('stopQueue').disabled = true;
           document.getElementById('helpNext').disabled = true;
