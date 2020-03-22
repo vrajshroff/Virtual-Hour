@@ -25,7 +25,7 @@
     initApp = function() {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {} else {
-          location.href = 'auth.html';
+          location.href = 'index.html';
         }
       }, function(error) {
         console.log(error);
