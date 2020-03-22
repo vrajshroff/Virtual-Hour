@@ -102,11 +102,6 @@
     function addToQueue() {
       document.getElementById("addToQueue").disabled = true;
 
-      if (!firebase.auth() || !firebase.auth().currentUser) {
-        window.location.href = "index.html";
-        return;
-      }
-
       db.collection("classes").doc(classID).collection("students").doc(firebase.auth().currentUser.uid).set({
           creator: firebase.auth().currentUser.displayName,
           needHelp: "",
@@ -127,11 +122,6 @@
 
     function seeQueue() {
       document.getElementById("seeQueue").disabled = true;
-
-      if (!firebase.auth() || !firebase.auth().currentUser) {
-        window.location.href = "index.html";
-        return;
-      }
 
       unsubscribe = db.collection("classes").doc(classID).collection("students").orderBy("timeAdded")
         .onSnapshot(function(querySnapshot) {
