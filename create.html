@@ -68,63 +68,141 @@
 
       </div>
     </div>
+  </div>
 
-    <script>
-      function create() {
-        document.getElementById("createButton").disabled = true;
+  <script>
+    async function create() {
+      document.getElementById("createButton").disabled = true;
 
-        var classID = document.getElementById("classID").value;
-        var adminNum = document.getElementById("adminNum").value;
-        var emailsRaw = document.getElementById("emails").value;
-        var emails = [];
+      var classID = document.getElementById("classID").value;
+      var adminNum = document.getElementById("adminNum").value;
+      var emailsRaw = document.getElementById("emails").value;
+      var emails = [];
+      var links = [];
 
-        if (!classID || !adminNum || !emails) {
-          document.getElementById("error").innerHTML = 'Fill out all of the fields above.';
-          document.getElementById("createButton").disabled = false;
-          return;
+      if (!classID || !adminNum || !emails) {
+        document.getElementById("error").innerHTML = 'Fill out all of the fields above.';
+        document.getElementById("createButton").disabled = false;
+        return;
+      }
+
+      if (!/^\d+$/.test(adminNum) || adminNum < 1 || adminNum > 10) {
+        document.getElementById("error").innerHTML = 'Enter valid number of TAs, > 0 and < 11.';
+        document.getElementById("createButton").disabled = false;
+        return;
+      }
+
+      var creatorAdded = false;
+      emailsRaw = emailsRaw.split(",");
+      for (var i = 0; i < emailsRaw.length; i++) {
+        emailsRaw[i] = emailsRaw[i].trim();
+        if (emailsRaw[i]) {
+          if (emailsRaw[i] == firebase.auth().currentUser.email) {
+            creatorAdded = true;
+          }
+          emails.push({
+            email: emailsRaw[i]
+          });
         }
+      }
+      if (!creatorAdded) {
+        emails.push({
+          email: firebase.auth().currentUser.email
+        });
+      }
 
-        if (!/^\d+$/.test(adminNum) || adminNum < 1 || adminNum > 10) {
-          document.getElementById("error").innerHTML = 'Enter valid number of TAs, > 0 and < 11.';
+      if (!firebase.auth() || !firebase.auth().currentUser) {
+        window.location.href = "auth.html?websiteId=create.html";
+        return;
+      }
+
+      document.getElementById("error").innerHTML = "Creating Virtual Hour for your class. Please wait...";
+
+      getLinksFromMeet(Number(adminNum), emails, links);
+      while (links.length != adminNum) {
+        await new Promise(r => setTimeout(r, 1000));
+      }
+
+      var db = firebase.firestore();
+      db.collection("classes").doc(classID).set({
+          adminNum: Number(adminNum),
+          tas: emails,
+          creator: firebase.auth().currentUser.displayName,
+          email: firebase.auth().currentUser.email,
+          links: links,
+          status: false
+        })
+        .then(function() {
+          document.getElementById("error").innerHTML = 'Virtual Hour created successfully for the class.\nPlease share this class ID with your students: ' + classID;
           document.getElementById("createButton").disabled = false;
-          return;
-        }
+        })
+        .catch(function(error) {
+          document.getElementById("error").innerHTML =
+            '<b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID already taken. Please try again with a new, more specific class ID.<br>2. You are not logged in with your school email. <a href="auth.html?websiteId=create.html">Go back to the home page</a> and try again.<br>3. The maximum number of TA per OH is not in the range of [1, 10].<br>4. The format of emails of all TAs is invalid or too many emails were entered.<br> 5. It is quite likely that it was a one time error and just <a href="auth.html?websiteId=create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
+          document.getElementById("createButton").disabled = false;
+        });
+    }
+  </script>
 
-        emailsRaw = emailsRaw.split(",");
-        for (var i = 0; i < emailsRaw.length; i++) {
-          emailsRaw[i] = emailsRaw[i].trim();
-          if (emailsRaw[i]) {
-            emails.push(emailsRaw[i]);
+  <script type="text/javascript">
+    var CLIENT_ID = '721474763020-18a29lmteajojuhdr1tbu3bdr8d7vktk.apps.googleusercontent.com';
+    var API_KEY = 'AIzaSyAGxwN2s_IbmtaiKkduAqI2iIsbfQHvEKM';
+    var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+    var SCOPES = "https://www.googleapis.com/auth/calendar";
+
+    function handleClientLoad() {
+      gapi.load('client:auth2', initClient);
+    }
+
+    function initClient() {
+      gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        discoveryDocs: DISCOVERY_DOCS,
+        scope: SCOPES
+      }).then(function() {}, function(error) {
+        console.log(JSON.stringify(error, null, 2));
+      });
+    }
+
+    function getLinksFromMeet(num, attendees, links) {
+      var today = new Date();
+      var todayEnd = new Date();
+      todayEnd.setHours(today.getHours() + 1);
+      var event = {
+        'summary': 'Virtual Hour',
+        'description': 'This event is automatically created by Virtual Hour. Please do not delete. This event information is used to connect you to your students. Note: We do note read your Calendar. All your information is private!',
+        'start': {
+          'dateTime': today
+        },
+        'end': {
+          'dateTime': todayEnd
+        },
+        'attendees': attendees,
+        "conferenceData": {
+          "createRequest": {
+            "requestId": Date.now()
           }
         }
+      };
 
-        if (!firebase.auth() || !firebase.auth().currentUser) {
-          window.location.href = "auth.html?websiteId=create.html";
-          return;
-        }
-
-        var db = firebase.firestore();
-        db.collection("classes").doc(classID).set({
-            adminNum: Number(adminNum),
-            tas: emails,
-            creator: firebase.auth().currentUser.displayName,
-            email: firebase.auth().currentUser.email,
-            links: [],
-            status: false
-          })
-          .then(function() {
-            document.getElementById("error").innerHTML = 'Virtual Hour created successfully for the class.\nPlease share this class ID with your students: ' + classID;
-            document.getElementById("createButton").disabled = false;
-          })
-          .catch(function(error) {
-            document.getElementById("error").innerHTML =
-              '<b>Error Occured. A Few of the Possible Reasons</b>:<br>1. Class ID already taken. Please try again with a new, more specific class ID.<br>2. You are not logged in with your school email. <a href="auth.html?websiteId=create.html">Go back to the home page</a> and try again.<br>3. The maximum number of TA per OH is not in the range of [1, 10].<br>4. The format of emails of all TAs is invalid or too many emails were entered.<br> 5. It is quite likely that it was a one time error and just <a href="auth.html?websiteId=create.html">trying again</a> will resolve the issue.<br><br>Contact <a href="mailto:vshroff@sas.upenn.edu"> Vraj Shroff</a> if the problem persists.';
-            document.getElementById("createButton").disabled = false;
-          });
+      for (var i = 0; i < num; i++) {
+        var request = gapi.client.calendar.events.insert({
+          'calendarId': 'primary',
+          'resource': event,
+          conferenceDataVersion: 1
+        });
+        request.execute(function(event) {
+          links.push(event.hangoutLink);
+        });
       }
-    </script>
 
-  </div>
+    }
+  </script>
+
+  <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()">
+  </script>
+
 </body>
 
 
