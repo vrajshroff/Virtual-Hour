@@ -109,8 +109,8 @@
           links = doc.data().links;
           if (links.length > 1) {
             document.getElementById("roomNums").innerHTML = "Please select a room number from 0 to " + (links.length - 1) + ". Ask other TAs holding this office hours with you to select a different number.";
-            document.getElementById("roomNumber").style.display = block;
-            document.getElementById("roomNumberLabel").style.display = block;
+            document.getElementById("roomNumber").style.display = "block";
+            document.getElementById("roomNumberLabel").style.display = "block";
           }
           setMeetingRooms();
           seeQueue();
